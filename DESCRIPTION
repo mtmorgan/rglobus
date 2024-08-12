@@ -13,8 +13,7 @@ Description: 'Globus' is a cloud-based file transfer service,
     collections, and to transfer files and directories between
     collections. Use of the package is illustrated with data from the
     'HuBMAP' <https://portal.hubmapconsortium.org/> data portal and
-    'HuBMAPR' pacakge. Avoid function name conflicts by use of
-    `rglobus::<fun>()` exclusively.
+    'HuBMAPR' package.
 License: Artistic-2.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
