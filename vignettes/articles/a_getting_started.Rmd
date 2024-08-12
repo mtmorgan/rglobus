@@ -1,0 +1,54 @@
+---
+title: "Getting Started"
+author:
+- name: Martin Morgan
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+```
+
+THIS WILL BE UPDATED SOON!
+
+# Introduction & installation
+
+Install the package if necessary
+
+```{r install_github, eval = FALSE}
+if (!requireNamespace("remotes", quiety = TRUE))
+    install.packages("remotes", repos = "https://CRAN.R-project.org")
+remotes::install_github("mtmorgan/rglobus")
+```
+
+Attach the package to your *R* session
+
+```{r library, message = FALSE}
+library(rglobus)
+```
+
+# Globus
+
+## Establish an account
+
+## (Optional) Create a local collection
+
+# Discovering and navigating collections
+
+```{r}
+```
+
+# Directory and file transfer
+
+```{r}
+```
+
+# Session information
+
+This vignette was compiled using the following software versions
+
+```{r session_info}
+sessionInfo()
+```
+

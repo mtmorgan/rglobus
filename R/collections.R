@@ -62,6 +62,7 @@ collections <-
 #'
 #' @examples
 #' my_collection <- my_collections()
+#' my_collection
 #'
 #' @export
 my_collections <-
@@ -83,11 +84,11 @@ my_collections <-
 #' hubmap |>
 #'     globus_ls("0008a49ac06f4afd886be81491a5a926/sprm_outputs")
 #'
-#' ## filter files with name ending in 'csv', and with size < 1000
+#' ## filter files with name ending in 'csv', and with size < 200
 #' hubmap |>
 #'     globus_ls(
 #'         "0008a49ac06f4afd886be81491a5a926/sprm_outputs",
-#'         filters = "name:~*.csv/size:<1000"
+#'         filters = "name:~*.csv/size:<200"
 #'     )
 #'
 #' ## filter files ending in 'json', or with size > 100000000
@@ -101,7 +102,9 @@ my_collections <-
 globus_ls <-
     function(
         .data,
-        path = "", show_hidden = FALSE, filters = character(),
+        path = "",
+        show_hidden = FALSE,
+        filters = character(),
         all_fields = FALSE)
 {
     collection_id <- pull_id(.data, "id")

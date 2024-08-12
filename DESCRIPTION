@@ -22,3 +22,5 @@ Imports: httr2, dplyr, rjsoncons, whisker
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://mtmorgan.github.io/rglobus/
+Config/Needs/website: rmarkdown
