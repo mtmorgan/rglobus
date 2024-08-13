@@ -17,7 +17,7 @@ mkdir() creates a directory in a collection."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">rglobus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -186,29 +186,29 @@ files of any size, or any file smaller than 200 bytes.</p>
 <span class="r-in"><span><span class="va">my_collection</span> <span class="op">&lt;-</span> <span class="fu">my_collections</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">my_collection</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   display_name               id                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Martin's HuBMAP Collection 714ce2c4-3268-11ef-9629-453c3ae125a5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   display_name    id                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Martin's HuBMAP 714ce2c4-3268-11ef-9629-453c3ae125a5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
 <span class="r-in"><span><span class="co">## Directories and files</span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">globus_ls</span><span class="op">(</span><span class="va">hubmap</span><span class="op">)</span>    <span class="co"># same as `hubmap |&gt; globus_ls()`</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,170 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,308 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    name                             last_modified              size type </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 0008a49ac06f4afd886be81491a5a926 2024-07-26 13:35:21+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 0027cb59bcb4a34d5db83acaf934a9d9 2024-07-26 13:19:12+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 00318be0b7cfa3c6ed7fbeab08fe700b 2024-07-26 12:58:42+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 0066713ca95c03c52cb40f90ce8bbdb8 2024-04-17 23:24:41+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 007ae59344e7df0e398204ee40155cb0 2024-04-17 23:18:56+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 007f3dfaaa287d5c7c227651f61a9c5b 2024-07-26 14:46:55+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 00cc71c7e1cddac60e794044079faeee 2024-07-26 14:17:08+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 00d1a3623dac388773bc7780fcb42797 2024-04-17 23:02:27+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 00e256274c3dd0976313a73df36880f4 2023-12-18 01:16:23+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 00f1ce42073a3dc6c442e9105f4e4f61 2024-07-26 13:27:30+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,160 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 002e9747855eef1e69452b39713a7592 2024-08-13 19:04:13+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 00318be0b7cfa3c6ed7fbeab08fe700b 2024-07-26 12:58:42+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 004d4f157df4ba07356cd805131dfc04 2024-08-13 19:21:04+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 0066713ca95c03c52cb40f90ce8bbdb8 2024-04-17 23:24:41+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 007ae59344e7df0e398204ee40155cb0 2024-04-17 23:18:56+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 007f3dfaaa287d5c7c227651f61a9c5b 2024-07-26 14:46:55+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 00cc71c7e1cddac60e794044079faeee 2024-07-26 14:17:08+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 00d1a3623dac388773bc7780fcb42797 2024-04-17 23:02:27+00:00  <span style="text-decoration: underline;">4</span>096 dir  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,298 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## hierarchical traversal</span></span></span>
 <span class="r-in"><span><span class="va">hubmap</span> <span class="op">|&gt;</span></span></span>
