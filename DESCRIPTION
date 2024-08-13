@@ -1,6 +1,6 @@
 Package: rglobus
 Title: Manage 'Globus' File Transfer Services
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: 
     person(
         "Martin", "Morgan", role = c("aut", "cre"),

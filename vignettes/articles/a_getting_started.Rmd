@@ -10,9 +10,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-THIS WILL BE UPDATED SOON!
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
 # Introduction & installation
+
+This package is EXPERIMENTAL. It enables access to Globus collection
+management (including 'personal' collections on your own computer),
+including file and directory transfer. Many capabilities of Globus are
+not implemented.
 
 Install the package if necessary
 
@@ -28,16 +34,117 @@ Attach the package to your *R* session
 library(rglobus)
 ```
 
-# Globus
-
-## Establish an account
-
-## (Optional) Create a local collection
-
 # Discovering and navigating collections
 
+Globus data sets are organized into collections. Start by discovering
+collections that contain the words "HuBMAP" and "Public", in any
+order.
+
 ```{r}
+hubmap_collections <- collections("HuBMAP Public")
+hubmap_collections
 ```
+
+## Authentication
+
+The first time `collections()` is invoked, Globus requires that you
+authenticate. A web page appears, where one can choose authentication
+via generic identifiers like ORCID or Google, or through an
+institution that you belong to. Follow the browser prompt(s) and
+return to *R* when done.
+
+[![Authentication](images/authentication.png)](#authentication){style="display:block; margin-left:auto; margin-right:auto; width:80%"}
+
+## Collection content
+
+Each collection is presented as directories and files. Focus on the
+'HuBMAP Public' collection.
+
+```{r}
+hubmap <-
+    hubmap_collections |>
+    dplyr::filter(display_name == "HuBMAP Public")
+```
+
+List the content of the collection.
+
+```{r}
+globus_ls(hubmap)
+```
+
+There are `r NROW(globus_ls(hubmap))` records, each corresponding to a
+HuBMAP dataset. Information about each dataset, e.g., the dataset with
+name `0008a49ac06f4afd886be81491a5a926` is available from the
+[HuBMAP][] data portal, or using the [HuBMAPR][] package. (Usually,
+one would 'discover' the dataset name using the data portal or
+[HuBMAPR][], and then use `rglobus` to further explore the content).
+
+List the content of a dataset of interest by adding a path to
+`globus_ls()`, e.g.,
+
+```{r}
+path <- "0008a49ac06f4afd886be81491a5a926"
+globus_ls(hubmap, path)
+```
+
+The dataset consists of files and directories; further explore the
+content of individual directories by constructing the appropriate path.
+
+```{r}
+path <- paste(path, "anndata-zarr", sep = "/")
+globus_ls(hubmap, path)
+
+path <- paste(path, "reg1_stitched_expressions-anndata.zarr", sep = "/")
+hubmap |> globus_ls(path)
+```
+
+Note in the last example that the functions in `rglobus` are designed
+to support 'piping'.
+
+[HuBMAP]: https://portal.hubmapconsortium.org/search?q=0008a49ac06f4afd886be81491a5a926&processing[0]=processed&entity_type[0]=Dataset
+[HuBMAPR]: https://christinehou11.github.io/HuBMAPR/
+
+## Local collections
+
+Globus provides software to allow your laptop to appear as a
+collection. Follow the [Globus Connect Personal][] installation
+instructions for your operating system, and launch the
+application. Then identify a location on your local disk to act as a
+collection.
+
+On macOS, I created a directory `~/tmp/HuBMAP`, and then configured
+Globus Connect Personal to share that location. I did this by
+launching the application (it appears as an icon in the menu bar) then
+selecting 'Preferences' and using the '-' and '+' buttons to select
+the path to my local collection.
+
+[![Local collections](images/local_collection.png)](#local-collections){style="display:block; margin-left:auto; margin-right:auto; width:80%"}
+
+Collections owned by you appear in `collections()`, but the
+convenience function `my_collections()` provides another way to access
+these.
+
+```{r}
+my_collections <- my_collections()
+my_collections
+```
+
+One aspect of the collection is that the path from the root (starting
+with `/`) or relative to the user home directory needs to be
+specified.
+
+```{r}
+globus_ls(my_collections, "/Users/ma38727/tmp")
+
+path <- "tmp"
+globus_ls(my_collections, path)
+
+## nothing here yet...
+path <- "tmp/HuBMAP"
+globus_ls(my_collections, path)
+```
+
+[Globus Connect Personal]: https://www.globus.org/globus-connect-personal
 
 # Directory and file transfer
 

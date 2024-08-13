@@ -62,9 +62,16 @@ error_body <-
     function(resp)
 {
     body <- resp_body_string(resp)
+    code <- j_query(body, "code", as = "R")
+    message <- j_query(body, "message", as = "R")
+    extra <-
+        if (identical(code, "ConsentRequired")) {
+            paste0("\n  ", j_query(body, "required_scopes", as = "R"))
+        }
     paste0(
-        j_query(body, "code", as = "R"), ":\n  ",
-        j_query(body, "message", as = "R")
+        code, ":\n  ",
+        message,
+        extra
     )
 }
 
@@ -110,10 +117,9 @@ resp_as_tibble <-
         `unexpected 'DATA_TYPE' in response` =
             identical(j_query(body, "DATA_TYPE"), data_type)
     )
-    tbl <- bind_rows(
-        tbl0,
-        j_pivot(body, "DATA", as = "tibble")
-    )
+    tbl <- j_pivot(body, "DATA", as = "tibble")
+    if (!NROW(tbl))
+        tbl <- tbl0
     tbl <- select(tbl, required_fields, if (all_fields) everything())
 
     mutate(tbl, across(where(is.list), tibble_column_unlist_maybe))
