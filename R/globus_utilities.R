@@ -82,9 +82,23 @@ req_resp <-
     req_perform(req)
 }
 
+## clean 'list' columns to vectors, if possible
+tibble_column_unlist_maybe <-
+    function(.x)
+{
+    ## requirement for unlisting -- 0 or 1 elements in each list
+    lengths <- lengths(.x)
+    if (!all(lengths) < 2L)
+        return(.x)
+
+    result <- rep(NA, length(.x))
+    result[lengths == 1] <- unlist(.x)
+    result
+}
+
 #' @importFrom httr2 resp_body_string
 #'
-#' @importFrom dplyr bind_rows select everything
+#' @importFrom dplyr bind_rows mutate select everything across where
 #'
 #' @importFrom rjsoncons j_pivot
 resp_as_tibble <-
@@ -100,5 +114,7 @@ resp_as_tibble <-
         tbl0,
         j_pivot(body, "DATA", as = "tibble")
     )
-    select(tbl, required_fields, if (all_fields) everything())
+    tbl <- select(tbl, required_fields, if (all_fields) everything())
+
+    mutate(tbl, across(where(is.list), tibble_column_unlist_maybe))
 }

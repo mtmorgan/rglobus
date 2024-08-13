@@ -5,9 +5,7 @@
 \alias{transfer}
 \alias{transfer_item}
 \alias{transfer_label}
-\alias{task_status}
-\alias{task_cancel}
-\title{Globus file and directory transfer}
+\title{File and directory transfer}
 \usage{
 copy(
   source,
@@ -38,16 +36,12 @@ transfer(
 transfer_item(source_path, destination_path, recursive)
 
 transfer_label()
-
-task_status(.data, all_fields = FALSE)
-
-task_cancel(.data)
 }
 \arguments{
-\item{source}{a tibble containing a single row with column \code{id},
+\item{source}{a \code{tibble} containing a single row with column \code{id},
 the unique identifier for the source collection.}
 
-\item{destination}{a tibble containing a single row with column
+\item{destination}{a \code{tibble} containing a single row with column
 \code{id}, the unique identifier of the destination collection.}
 
 \item{source_path}{\code{character(1)} path from the source collection
@@ -90,50 +84,24 @@ source is a file.}
 \item{filter_rules}{not implemented.}
 
 \item{sync_level}{not implemented.}
-
-\item{.data}{a tibble with column \code{task_id}, as returned by
-\code{copy()} or \code{transfer()}.}
-
-\item{all_fields}{\code{logical(1)} indicating whether abbreviated or
-detailed information about the task status should be returned}
 }
 \value{
-\code{copy()} and \code{transfer()} return a tibble with
-columns \code{submission_id}, \code{task_id} and \code{code}. \code{code} is one of
-'Accepted' (the task is queued for execution) or \code{Duplicate} (the
-task is a re-submission of an existing task). Use the return value
-to check or cancel the task with \code{task_status()} or
-\code{task_cancel()}.
+\code{copy()} and \code{transfer()} return a \code{tibble} with columns
+\code{submission_id}, \code{task_id} and \code{code}. \code{code} is one of 'Accepted'
+(the task is queued for execution) or \code{Duplicate} (the task is a
+re-submission of an existing task). Use the return value to check
+or cancel the task with \code{task_status()} or \code{task_cancel()}.
 
 \code{transfer_label()} returns a \code{character(1)} label including
-date, time, and user information, with suffix 'r-globus-transfer'.
-
-\code{task_status()} returns a tibble summarizing the status of
-the task. The meaning of each column is described in the Globus
-documentation at
-\itemize{
-\item https://docs.globus.org/api/transfer/task/#task_document
-}
-
-With the default value \code{all_fields = FALSE}, the tibble
-contains three columns
-\itemize{
-\item \code{status}: one of 'ACTIVE', 'INACTIVE', 'SUCCEEDED' or 'FAILED'
-\item \code{nice_status}: either NULL or, for a failing task, an indication
-of the reason for failure, e.g., 'PERMISSION_DENIED'.
-\item \code{task_id}: the id of the task.
-}
-
-\code{task_cancel()} returns its input argument, invisibly.
+date, time, and user information, with suffix \code{rglobus-transfer}.
 }
 \description{
 \code{copy()} copies files or directories (perhaps
 recursively) from one collection to another.
 
-\code{transfer()} and \code{transfer_item()} are
-lower-level functions that allow for one or more files or
-directories, including symbolic links, to be transfered as a
-single task.
+\code{transfer()} and \code{transfer_item()} are lower-level
+functions that allow for one or more files or directories,
+including symbolic links, to be transferred as a single task.
 
 \code{transfer_item()} constructs the JSON
 description of a single transfer, e.g., of a source file to a
@@ -142,12 +110,6 @@ destination file. It is used as input to \code{transfer()}.
 \code{transfer_label()} is a helper function to
 provide an identifying label for each task, visible for
 instance in the Globus web application.
-
-\code{task_status()} retrieves the status of a task
-started by \code{copy()} or \code{transfer()}.
-
-\code{task_cancel()} cancels a task started with
-\code{copy()} or \code{transfer()}.
 }
 \details{
 \code{copy()} implements the common task of copying files or
@@ -155,21 +117,20 @@ folders between collections. \code{transfer()} allows
 specification of multiple transfer operations in a single task.
 
 \code{copy()} and \code{transfer()} submit a \emph{task} to initiate
-a transaction, but it is necessary to check on the stataus of the
+a transaction, but it is necessary to check on the status of the
 task with \code{task_status()}. It is also necessary to manually
 cancel tasks that fail with \code{task_cancel()}.
 
 In the Globus documentation,
-\itemize{
-\item \url{https://docs.globus.org/api/transfer/task_submit/#document_types}
+
+\url{https://docs.globus.org/api/transfer/task_submit/#document_types}
+
 sections 2.2, 2.3, and 2.4 describe options relevant to copying
 directories and files.
-\item \url{https://docs.globus.org/api/transfer/task_submit/#errors}
-describes errors during task submission.
-}
 
-\code{task_cancel()} prints a message indicating successful
-submission of the task cancelation operation.
+\url{https://docs.globus.org/api/transfer/task_submit/#errors}
+
+describes errors during task submission.
 }
 \examples{
 my_collection <- my_collections()
@@ -183,25 +144,21 @@ hubmap <-
 
 ## HubMAP dataset id, from HuBMAPR::datasets()
 dataset_id <- "d1dcab2df80590d8cd8770948abaf976"
-ls(hubmap, dataset_id)
+globus_ls(hubmap, dataset_id)
 
 ## copy file from HuBMAP dataset to `my_collection`
 source_path <- paste0(dataset_id, "/metadata.json")
 destination_path <- paste0("tmp/HuBMAP/", source_path)
 task <- copy(
     hubmap, my_collection,
-    source_path, destination_path
+    source_path, destination_path,
+    notify_on_succeeded = FALSE
 )
 task
+
+task_status(task)
 
 ## default task label
 transfer_label()
 
-## check transfer task status
-task_status(task)
-
-## tasks that are failing need to be cancelled
-\dontrun{
-task_cancel(task)
-}
 }

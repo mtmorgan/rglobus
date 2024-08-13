@@ -5,9 +5,14 @@
 \alias{my_collections}
 \alias{globus_ls}
 \alias{mkdir}
-\title{Globus collections, directories, and files}
+\title{Collections, directories, and files}
 \usage{
-collections(filter_fulltext, filter_scope = "all", ..., all_fields = FALSE)
+collections(
+  filter_fulltext = "",
+  filter_scope = "all",
+  ...,
+  all_fields = FALSE
+)
 
 my_collections(filter_fulltext = "", ...)
 
@@ -21,15 +26,103 @@ globus_ls(
 
 mkdir(.data, path)
 }
+\arguments{
+\item{filter_fulltext}{\code{character()} filter applied to fields
+associated with collections, including display name,
+description, user, etc. \code{filter_fulltext} is required when
+\code{filter_scope = "all"}.}
+
+\item{filter_scope}{\code{character(1)} scope of search, e.g., \code{"all"}
+or \code{"my-endpoints"}. See details.}
+
+\item{...}{additional, less-common parameters influencing
+search. See details.}
+
+\item{all_fields}{\code{logical(1)} indicating whether abbreviated or
+full listing should be returned.}
+
+\item{.data}{a \code{tibble} with a single row, containing a column \code{id}
+identifying the collection, as returned by \code{collections()} or
+\code{my_collections()}.}
+
+\item{path}{\code{character(1)} location in the collection for listing
+or directory creation.}
+
+\item{show_hidden}{\code{logical(1)} controls inclusion of 'hidden'
+(starting with '.') files in the return value of \code{globus_ls()}.}
+
+\item{filters}{\code{character()} of filter terms. See details.}
+}
+\value{
+\code{collections()} and \code{my_collections()} return a \code{tibble} containing
+columns \code{display_name} and (collection / endpoint) \code{id}. Additional
+fields returned when \code{all_fields = TRUE} are described at
+
+\url{https://docs.globus.org/api/transfer/endpoints_and_collections/#endpoint_or_collection_fields}.
+
+\code{globus_ls()} returns a \code{tibble} with the name, last modified, size,
+and type (directory or file) of each entry. Additional fields are
+returned when \code{all_fields = TRUE}, as described in
+
+\url{https://docs.globus.org/api/transfer/file_operations/#file_document}
+
+\code{mkdir()} returns a \code{tibble} of the directory listing of the
+enclosing directory.
+}
 \description{
-Globus collections, directories, and files
+\code{collections()} returns collections available to the
+user.
+
+\code{my_collections()} is a convenience function to
+identify collections belonging to the current user.
+
+\code{globus_ls()} lists the content of a collection.
+
+\code{mkdir()} creates a directory in a collection.
+}
+\details{
+\code{filter_fulltext} follows rules defined at
+
+\url{https://docs.globus.org/api/transfer/endpoint_and_collection_search/#endpoint_search}
+
+Approximately, each word is treated as a separate term and matched
+to the prefix of search fields. Thus \code{"Public HuBMAP"} matches
+collection mentioning both \code{"Public"} AND \code{"HuBMAP"}, appearing in
+any order, e.g., \code{"HuBMAP Public"}, \code{"HuBMAP Dev Public"}, etc.
+
+\code{filter_scope} can take on values described in
+
+\url{https://docs.globus.org/api/transfer/endpoint_and_collection_search/#search_scope}
+
+\code{...} arguments to \code{collections()} and \code{my_collections()} are
+described in
+
+\url{https://docs.globus.org/api/transfer/endpoint_and_collection_search/#query_parameters}
+
+'offset' and 'limit' are used internally.
+
+When used with 'Globus Connect Personal' (used to enable transfer
+to and from a local computer), \code{path} is either the full path on
+the user system (starting with \code{/}, e.g., \verb{/Users/mtmorgan/HuBMAP})
+or relative to the user home directory (starting \emph{without} a \code{/},
+e.g., '~/HuBMAP').
+
+\code{filters} for \code{globus_ls()} are described at
+
+\url{https://docs.globus.org/api/transfer/file_operations/#dir_listing_filtering}
+
+Elements of \code{filters} are treated as 'OR' operations, thus \code{filters = "name:~*.csv/size:<200"} finds \code{csv} files smaller than 200 bytes,
+whereas \verb{filters = #' c("name:~*.csv", "size:<200")} finds \code{csv}
+files of any size, or any file smaller than 200 bytes.
+
+\code{mkdir()} creates directory elements recursively.
 }
 \examples{
 ##
 ## collections
 ##
 
-collections <- collections("HuBMAP Public")  # '&' words or elements
+collections <- collections("HuBMAP Public")  # 'AND' words or elements
 collections
 
 hubmap <-
@@ -37,6 +130,7 @@ hubmap <-
     dplyr::filter(display_name == "HuBMAP Public")
 
 my_collection <- my_collections()
+my_collection
 
 ##
 ## Directories and files
@@ -48,11 +142,11 @@ globus_ls(hubmap)    # same as `hubmap |> globus_ls()`
 hubmap |>
     globus_ls("0008a49ac06f4afd886be81491a5a926/sprm_outputs")
 
-## filter files with name ending in 'csv', and with size < 1000
+## filter files with name ending in 'csv', and with size < 200
 hubmap |>
     globus_ls(
         "0008a49ac06f4afd886be81491a5a926/sprm_outputs",
-        filters = "name:~*.csv/size:<1000"
+        filters = "name:~*.csv/size:<200"
     )
 
 ## filter files ending in 'json', or with size > 100000000

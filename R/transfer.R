@@ -20,15 +20,15 @@ submission_id <-
 
 #' @rdname transfer
 #'
-#' @title Globus file and directory transfer
+#' @title File and directory transfer
 #'
 #' @description `copy()` copies files or directories (perhaps
 #'     recursively) from one collection to another.
 #'
-#' @param source a tibble containing a single row with column `id`,
+#' @param source a `tibble` containing a single row with column `id`,
 #'     the unique identifier for the source collection.
 #'
-#' @param destination a tibble containing a single row with column
+#' @param destination a `tibble` containing a single row with column
 #'     `id`, the unique identifier of the destination collection.
 #'
 #' @param source_path `character(1)` path from the source collection
@@ -53,27 +53,28 @@ submission_id <-
 #' specification of multiple transfer operations in a single task.
 #'
 #' `copy()` and `transfer()` submit a *task* to initiate
-#' a transaction, but it is necessary to check on the stataus of the
+#' a transaction, but it is necessary to check on the status of the
 #' task with `task_status()`. It is also necessary to manually
 #' cancel tasks that fail with `task_cancel()`.
 #'
 #' In the Globus documentation, 
 #'
-#' - <https://docs.globus.org/api/transfer/task_submit/#document_types>
-#'   sections 2.2, 2.3, and 2.4 describe options relevant to copying
-#'   directories and files.
+#' <https://docs.globus.org/api/transfer/task_submit/#document_types>
 #'
-#' - <https://docs.globus.org/api/transfer/task_submit/#errors>
-#'   describes errors during task submission.
+#' sections 2.2, 2.3, and 2.4 describe options relevant to copying
+#' directories and files.
+#'
+#' <https://docs.globus.org/api/transfer/task_submit/#errors>
+#'
+#' describes errors during task submission.
 #'
 #' @return
 #'
-#' `copy()` and `transfer()` return a tibble with
-#' columns `submission_id`, `task_id` and `code`. `code` is one of
-#' 'Accepted' (the task is queued for execution) or `Duplicate` (the
-#' task is a re-submission of an existing task). Use the return value
-#' to check or cancel the task with `task_status()` or
-#' `task_cancel()`.
+#' `copy()` and `transfer()` return a `tibble` with columns
+#' `submission_id`, `task_id` and `code`. `code` is one of 'Accepted'
+#' (the task is queued for execution) or `Duplicate` (the task is a
+#' re-submission of an existing task). Use the return value to check
+#' or cancel the task with `task_status()` or `task_cancel()`.
 #' 
 #'
 #' @examples
@@ -88,16 +89,19 @@ submission_id <-
 #'
 #' ## HubMAP dataset id, from HuBMAPR::datasets()
 #' dataset_id <- "d1dcab2df80590d8cd8770948abaf976"
-#' ls(hubmap, dataset_id)
+#' globus_ls(hubmap, dataset_id)
 #'
 #' ## copy file from HuBMAP dataset to `my_collection`
 #' source_path <- paste0(dataset_id, "/metadata.json")
 #' destination_path <- paste0("tmp/HuBMAP/", source_path)
 #' task <- copy(
 #'     hubmap, my_collection,
-#'     source_path, destination_path
+#'     source_path, destination_path,
+#'     notify_on_succeeded = FALSE
 #' )
 #' task
+#'
+#' task_status(task)
 #'
 #' @export
 copy <-
@@ -117,10 +121,9 @@ copy <-
 
 #' @rdname transfer
 #'
-#' @description `transfer()` and `transfer_item()` are
-#'     lower-level functions that allow for one or more files or
-#'     directories, including symbolic links, to be transfered as a
-#'     single task.
+#' @description `transfer()` and `transfer_item()` are lower-level
+#'     functions that allow for one or more files or directories,
+#'     including symbolic links, to be transferred as a single task.
 #'
 #' @param transfer_items `character()` of `transfer_item()` or
 #'     `symlink_item()` objects.
@@ -246,7 +249,7 @@ transfer_item <-
 #' @return
 #'
 #' `transfer_label()` returns a `character(1)` label including
-#' date, time, and user information, with suffix 'r-globus-transfer'.
+#' date, time, and user information, with suffix `rglobus-transfer`.
 #'
 #' @examples
 #' ## default task label
@@ -259,94 +262,6 @@ transfer_label <-
     paste(
         format(Sys.time(), "%Y-%m-%d %H:%M:%S%z"),
         Sys.info()[["user"]],
-        "r-globus-transfer"
+        "rglobus-transfer"
     )
-}
-
-## tasks
-
-#' @rdname transfer
-#'
-#' @description `task_status()` retrieves the status of a task
-#'     started by `copy()` or `transfer()`.
-#'
-#' @param .data a tibble with column `task_id`, as returned by
-#'     `copy()` or `transfer()`.
-#'
-#' @param all_fields `logical(1)` indicating whether abbreviated or
-#'     detailed information about the task status should be returned
-#'
-#' @return
-#'
-#' `task_status()` returns a tibble summarizing the status of
-#' the task. The meaning of each column is described in the Globus
-#' documentation at
-#'
-#' - https://docs.globus.org/api/transfer/task/#task_document
-#'
-#' With the default value `all_fields = FALSE`, the tibble
-#' contains three columns
-#'
-#' - `status`: one of 'ACTIVE', 'INACTIVE', 'SUCCEEDED' or 'FAILED'
-#'
-#' - `nice_status`: either NULL or, for a failing task, an indication
-#'   of the reason for failure, e.g., 'PERMISSION_DENIED'.
-#'
-#' - `task_id`: the id of the task.
-#'
-#' @examples
-#' ## check transfer task status
-#' task_status(task)
-#'
-#' @export
-task_status <-
-    function(.data, all_fields = FALSE)
-{
-    task_id <- pull_id(.data, "task_id")
-    uri <- paste0(TRANSFER, "/task/", task_id)
-    resp <- req_resp(uri)
-
-    body <- resp_body_string(resp)
-    stopifnot(identical(j_query(body, "DATA_TYPE"), "task"))
-    tbl <- j_pivot(body, as = "tibble")
-    select(
-        tbl,
-        "status", "nice_status", "task_id",
-        if (all_fields) everything())
-}
-
-#' @rdname transfer
-#'
-#' @description `task_cancel()` cancels a task started with
-#'     `copy()` or `transfer()`.
-#'
-#' @details
-#'
-#' `task_cancel()` prints a message indicating successful
-#' submission of the task cancelation operation.
-#'
-#' @return
-#'
-#' `task_cancel()` returns its input argument, invisibly.
-#'
-#' @examples
-#' ## tasks that are failing need to be cancelled
-#' \dontrun{
-#' task_cancel(task)
-#' }
-#' @export
-task_cancel <-
-    function(.data)
-{
-    task_id <- pull_id(.data, "task_id")
-    uri <- paste0(TRANSFER, "/task/", task_id, "/cancel")
-    resp <- req_resp(uri, .body = '')
-
-    body <- resp_body_string(resp)
-    stopifnot(identical(j_query(body, "DATA_TYPE"), "result"))
-    message(
-        j_query(body, "code"), ": ", j_query(body, "message")
-    )
-
-    invisible(.data)
 }
