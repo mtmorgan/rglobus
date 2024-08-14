@@ -2,8 +2,8 @@ pandoc: 3.1.6.2
 pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
-  articles/a_getting_started: a_getting_started.html
-last_built: 2024-08-14T17:53Z
+  articles/a_get_started: a_get_started.html
+last_built: 2024-08-14T19:29Z
 urls:
   reference: https://mtmorgan.github.io/rglobus/reference
   article: https://mtmorgan.github.io/rglobus/articles
