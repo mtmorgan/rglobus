@@ -1,19 +1,19 @@
 Package: rglobus
-Title: Manage 'Globus' File Transfer Services
-Version: 0.0.0.9003
+Title: Manage 'Globus' Collection and File Transfer Services
+Version: 0.0.1
 Authors@R: 
     person(
         "Martin", "Morgan", role = c("aut", "cre"),
         email = "mtmorgan.xyz@gmail.com",
         comment = c(ORCID = "0000-0002-5874-8148")
     )
-Description: 'Globus' is a cloud-based file transfer service,
+Description: 'Globus' is in part a cloud-based file transfer service,
     available at <https://www.globus.org/>. This package provides an
-    'R' client with the ability to discover and navigate file
-    collections, and to transfer files and directories between
-    collections. Use of the package is illustrated with data from the
-    'HuBMAP' <https://portal.hubmapconsortium.org/> data portal and
-    'HuBMAPR' package.
+    'R' client with the ability to discover and navigate collections,
+    and to transfer files and directories between collections. Use of
+    the package is illustrated with data from the 'HuBMAP'
+    <https://portal.hubmapconsortium.org/> data portal and 'HuBMAPR'
+    package.
 License: Artistic-2.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

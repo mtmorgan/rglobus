@@ -1,5 +1,5 @@
 ---
-title: "Getting Started"
+title: "Get Started"
 author:
 - name: Martin Morgan
 ---
@@ -35,6 +35,11 @@ Attach the package to your *R* session
 ```{r library, message = FALSE}
 library(rglobus)
 ```
+
+See the [Local collections][] section to configure your own computer
+for transfer operations.
+
+[Local collections]: #local-collections
 
 # Discovering and navigating collections
 
