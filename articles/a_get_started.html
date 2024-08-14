@@ -83,6 +83,8 @@ capabilities of Globus are not implemented.</p>
 <p>Attach the package to your <em>R</em> session</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mtmorgan.github.io/rglobus/">rglobus</a></span><span class="op">)</span></span></code></pre></div>
+<p>See the <a href="#local-collections">Local collections</a> section to
+configure your own computer for transfer operations.</p>
 </div>
 <div class="section level2">
 <h2 id="discovering-and-navigating-collections">Discovering and navigating collections<a class="anchor" aria-label="anchor" href="#discovering-and-navigating-collections"></a>
@@ -223,32 +225,29 @@ specified.</p>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   name   last_modified              size type </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-14 19:30:12+00:00    96 dir</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-14 19:36:54+00:00    64 dir</span></span>
 <span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="st">"tmp"</span></span>
 <span><span class="fu"><a href="../reference/collections.html">globus_ls</a></span><span class="op">(</span><span class="va">my_collections</span>, <span class="va">path</span><span class="op">)</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   name   last_modified              size type </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-14 19:30:12+00:00    96 dir</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-14 19:36:54+00:00    64 dir</span></span>
 <span></span>
 <span><span class="co">## nothing here yet...</span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="st">"tmp/HuBMAP"</span></span>
 <span><span class="fu"><a href="../reference/collections.html">globus_ls</a></span><span class="op">(</span><span class="va">my_collections</span>, <span class="va">path</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">##   name                             last_modified              size type </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> d1dcab2df80590d8cd8770948abaf976 2024-08-14 19:30:12+00:00    96 dir</span></span></code></pre></div>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 0 × 4</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 4 variables: name &lt;chr&gt;, last_modified &lt;chr&gt;, size &lt;int&gt;, type &lt;chr&gt;</span></span></span></code></pre></div>
 <p>The local connection is under our ownership, so it is possible to,
 e.g., create a directory; <code><a href="../reference/collections.html">mkdir()</a></code> returns the updated
 directory listing of the enclosing folder.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/collections.html">mkdir</a></span><span class="op">(</span><span class="va">my_collections</span>, <span class="st">"tmp/HuBMAP/test"</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
-<span><span class="co">##   name                             last_modified              size type </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> d1dcab2df80590d8cd8770948abaf976 2024-08-14 19:30:12+00:00    96 dir  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> test                             2024-08-14 19:30:20+00:00    64 dir</span></span></code></pre></div>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">##   name  last_modified              size type </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> test  2024-08-14 19:36:55+00:00    64 dir</span></span></code></pre></div>
 <p>Of course we could have used our operating system to create the
 directory in the path of the local collection.</p>
 </div>
@@ -312,8 +311,8 @@ labeled, the default label is provided by
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## Rows: 1</span></span>
 <span><span class="co">## Columns: 3</span></span>
-<span><span class="co">## $ submission_id <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "a57d63ed-5a73-11ef-9081-a128da25f366"</span></span>
-<span><span class="co">## $ task_id       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "a57d63ec-5a73-11ef-9081-a128da25f366"</span></span>
+<span><span class="co">## $ submission_id <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "91469231-5a74-11ef-a026-9921d9de2129"</span></span>
+<span><span class="co">## $ task_id       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "91469230-5a74-11ef-a026-9921d9de2129"</span></span>
 <span><span class="co">## $ code          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Accepted"</span></span></code></pre></div>
 <p>We anticipate that <code>code</code> is “Accepted”, indicating that
 the task is sufficiently well-formatted to be added to the task
@@ -328,7 +327,7 @@ queue.</p>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">##   task_id                              type     status nice_status label        </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> a57d63ec-5a73-11ef-9081-a128da25f366 TRANSFER ACTIVE Queued      2024-08-14 1…</span></span></code></pre></div>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 91469230-5a74-11ef-a026-9921d9de2129 TRANSFER ACTIVE Queued      2024-08-14 1…</span></span></code></pre></div>
 <p>The <code>status</code> column changes from <code>ACTIVE</code> to
 <code>SUCCEEDED</code> for successful tasks. An active task proceeding
 normally has <code>nice_status</code> either <code>Queued</code> or
@@ -361,7 +360,7 @@ collection.</p>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   name          last_modified              size type </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> metadata.json 2024-08-14 19:30:23+00:00 <span style="text-decoration: underline;">34</span>814 file</span></span></code></pre></div>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> metadata.json 2024-08-14 19:36:59+00:00 <span style="text-decoration: underline;">34</span>814 file</span></span></code></pre></div>
 <p>If the task has failed or is still active for
 <code>nice_status</code> reasons that are not likely to resolve, the
 task can be canceled. Actually, canceling a completed task generates a
@@ -395,7 +394,7 @@ status.</p>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">##   task_id                              type     status nice_status label        </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> a96d620e-5a73-11ef-9081-a128da25f366 TRANSFER ACTIVE Queued      2024-08-14 1…</span></span></code></pre></div>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 952b2276-5a74-11ef-a026-9921d9de2129 TRANSFER ACTIVE Queued      2024-08-14 1…</span></span></code></pre></div>
 <p>The task is added to a queue, and eventually the entire content of
 the HuBMAP dataset is transferred.</p>
 <p>One can gain additional insight into the progress of the task by
