@@ -32,15 +32,15 @@ Globus documentation at
 
 \url{https://docs.globus.org/api/transfer/task/#task_document}
 
-With the default value \code{all_fields = FALSE}, the \code{tibble}
+With the default value \code{all_fields = FALSE}, the \code{tibble})
 contains columns
 \itemize{
 \item \code{task_id}: the id of the task.
-\item \code{status}: one of \code{ACTIVE}, \code{INACTIVE}, \code{SUCCEEDED} or \code{FAILED}.
 \item \code{type}: one of \code{TRANSFER} or \code{DELETE}.
+\item \code{status}: one of \code{ACTIVE}, \code{INACTIVE}, \code{SUCCEEDED} or \code{FAILED}.
 \item \code{nice_status}: \code{NULL} for a completed task; \code{OK} or \code{Queued}
 tasks proceeding normally; or an indication of the reason for
-\code{ACTIVE} or \code{INACTIVE} failure. Examples of \code{nice_status}
+\code{ACTIVE} or \code{INACTIVE} errors. Examples of \code{nice_status}
 indicating transient failure include: \code{PERMISSION_DENIED} if the
 user does not currently have access to the source or destination
 resource; \code{CONNECT_FAILED} if the Globus Connect Personal client

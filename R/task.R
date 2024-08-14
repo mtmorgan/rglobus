@@ -24,18 +24,18 @@
 #'
 #' <https://docs.globus.org/api/transfer/task/#task_document>
 #'
-#' With the default value `all_fields = FALSE`, the `tibble`
+#' With the default value `all_fields = FALSE`, the `tibble`)
 #' contains columns
 #'
 #' - `task_id`: the id of the task.
 #'
-#' - `status`: one of `ACTIVE`, `INACTIVE`, `SUCCEEDED` or `FAILED`.
-#'
 #' - `type`: one of `TRANSFER` or `DELETE`.
+#'
+#' - `status`: one of `ACTIVE`, `INACTIVE`, `SUCCEEDED` or `FAILED`.
 #'
 #' - `nice_status`: `NULL` for a completed task; `OK` or `Queued`
 #'   tasks proceeding normally; or an indication of the reason for
-#'   `ACTIVE` or `INACTIVE` failure. Examples of `nice_status`
+#'   `ACTIVE` or `INACTIVE` errors. Examples of `nice_status`
 #'   indicating transient failure include: `PERMISSION_DENIED` if the
 #'   user does not currently have access to the source or destination
 #'   resource; `CONNECT_FAILED` if the Globus Connect Personal client
