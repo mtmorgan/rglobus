@@ -17,7 +17,7 @@ submitted by the user."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">rglobus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,13 +94,13 @@ the most recently requested task at the top.</p></dd>
 status of the task(s). The meaning of each column is described in the
 Globus documentation at</p>
 <p><a href="https://docs.globus.org/api/transfer/task/#task_document" class="external-link">https://docs.globus.org/api/transfer/task/#task_document</a></p>
-<p>With the default value <code>all_fields = FALSE</code>, the <code>tibble</code>
+<p>With the default value <code>all_fields = FALSE</code>, the <code>tibble</code>)
 contains columns</p><ul><li><p><code>task_id</code>: the id of the task.</p></li>
-<li><p><code>status</code>: one of <code>ACTIVE</code>, <code>INACTIVE</code>, <code>SUCCEEDED</code> or <code>FAILED</code>.</p></li>
 <li><p><code>type</code>: one of <code>TRANSFER</code> or <code>DELETE</code>.</p></li>
+<li><p><code>status</code>: one of <code>ACTIVE</code>, <code>INACTIVE</code>, <code>SUCCEEDED</code> or <code>FAILED</code>.</p></li>
 <li><p><code>nice_status</code>: <code>NULL</code> for a completed task; <code>OK</code> or <code>Queued</code>
 tasks proceeding normally; or an indication of the reason for
-<code>ACTIVE</code> or <code>INACTIVE</code> failure. Examples of <code>nice_status</code>
+<code>ACTIVE</code> or <code>INACTIVE</code> errors. Examples of <code>nice_status</code>
 indicating transient failure include: <code>PERMISSION_DENIED</code> if the
 user does not currently have access to the source or destination
 resource; <code>CONNECT_FAILED</code> if the Globus Connect Personal client
@@ -136,22 +136,27 @@ submission of the task cancellation operation.</p>
 <span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="va">cancel</span><span class="op">)</span></span></span>
 <span class="r-in"><span>        <span class="fu">task_cancel</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   task_id                              type     status    nice_status label     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> e388940c-5a5c-11ef-be9a-83cd94efb466 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-1…</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pull(task_status, "status"):</span> could not find function "pull"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">task_list</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 32 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 44 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    task_id                              type     status    nice_status label    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 678515e1-59c3-11ef-b917-c30b78766494 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 3e44d56d-59c3-11ef-b917-c30b78766494 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> a8109f3c-599e-11ef-abcf-8b7014cf3b82 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> b7e8fdfe-5995-11ef-b6d4-f55c894bd1c6 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 7776b014-598f-11ef-b6d4-f55c894bd1c6 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 550bfa46-5987-11ef-b6d4-f55c894bd1c6 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> d2badc10-5986-11ef-b917-c30b78766494 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ff043bce-5984-11ef-abcf-8b7014cf3b82 TRANSFER FAILED    <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> e337d7de-5984-11ef-abcf-8b7014cf3b82 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 8473e936-5984-11ef-b6d4-f55c894bd1c6 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 22 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 9d53aa4a-5a65-11ef-9081-a128da25f366 TRANSFER FAILED    <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 997b6890-5a65-11ef-9081-a128da25f366 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 9275af58-5a65-11ef-a026-9921d9de2129 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 597817ac-5a65-11ef-be9a-83cd94efb466 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1de1a6c3-5a65-11ef-9081-a128da25f366 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 184e38e2-5a65-11ef-a026-9921d9de2129 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> e03327b0-5a64-11ef-be9a-83cd94efb466 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> e388940c-5a5c-11ef-be9a-83cd94efb466 TRANSFER SUCCEEDED <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 95e38528-5a5b-11ef-be9a-83cd94efb466 TRANSFER FAILED    <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 36bee1e6-5a5b-11ef-be9a-83cd94efb466 TRANSFER FAILED    <span style="color: #BB0000;">NA</span>          2024-08-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 34 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

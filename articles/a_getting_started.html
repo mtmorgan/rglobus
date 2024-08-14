@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rglobus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,8 +72,9 @@ Morgan</h4>
 </h2>
 <p>This package is EXPERIMENTAL. It enables access to Globus collection
 management (including ‘personal’ collections on your own computer),
-including file and directory transfer. Many capabilities of Globus are
-not implemented.</p>
+including file and directory transfer. The functions implemented in this
+package are primarily from the Globus ‘Transfer’ API, documented at <a href="https://docs.globus.org/api/transfer/" class="external-link uri">https://docs.globus.org/api/transfer/</a>. Many other
+capabilities of Globus are not implemented.</p>
 <p>Install the package if necessary</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quiety <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
@@ -86,6 +87,9 @@ not implemented.</p>
 <div class="section level2">
 <h2 id="discovering-and-navigating-collections">Discovering and navigating collections<a class="anchor" aria-label="anchor" href="#discovering-and-navigating-collections"></a>
 </h2>
+<p>The functions discussed here are based on the APIs described in <a href="https://docs.globus.org/api/transfer/endpoints_and_collections/" class="external-link">Endpoints
+and Collections</a> and <a href="https://docs.globus.org/api/transfer/endpoint_and_collection_search/" class="external-link">Endpoint
+and Collection Search</a>.</p>
 <p>Globus data sets are organized into collections. Start by discovering
 collections that contain the words “HuBMAP” and “Public”, in any
 order.</p>
@@ -219,14 +223,14 @@ specified.</p>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   name   last_modified              size type </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-13 22:34:18+00:00    96 dir</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-14 17:53:20+00:00    96 dir</span></span>
 <span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="st">"tmp"</span></span>
 <span><span class="fu"><a href="../reference/collections.html">globus_ls</a></span><span class="op">(</span><span class="va">my_collections</span>, <span class="va">path</span><span class="op">)</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   name   last_modified              size type </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-13 22:34:18+00:00    96 dir</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> HuBMAP 2024-08-14 17:53:20+00:00    96 dir</span></span>
 <span></span>
 <span><span class="co">## nothing here yet...</span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="st">"tmp/HuBMAP"</span></span>
@@ -234,18 +238,238 @@ specified.</p>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   name                             last_modified              size type </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> d1dcab2df80590d8cd8770948abaf976 2024-08-13 22:34:18+00:00    96 dir</span></span></code></pre></div>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> d1dcab2df80590d8cd8770948abaf976 2024-08-14 17:53:20+00:00    96 dir</span></span></code></pre></div>
+<p>The local connection is under our ownership, so it is possible to,
+e.g., create a directory; <code><a href="../reference/collections.html">mkdir()</a></code> returns the updated
+directory listing of the enclosing folder.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collections.html">mkdir</a></span><span class="op">(</span><span class="va">my_collections</span>, <span class="st">"tmp/HuBMAP/test"</span><span class="op">)</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
+<span><span class="co">##   name                             last_modified              size type </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> d1dcab2df80590d8cd8770948abaf976 2024-08-14 17:53:20+00:00    96 dir  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> test                             2024-08-14 17:53:27+00:00    64 dir</span></span></code></pre></div>
+<p>Of course we could have used our operating system to create the
+directory in the path of the local collection.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="directory-and-file-transfer">Directory and file transfer<a class="anchor" aria-label="anchor" href="#directory-and-file-transfer"></a>
 </h2>
+<p>Directory and file transfer are described in the <a href="https://docs.globus.org/api/transfer/task_submit/" class="external-link">Task
+Submission</a> API.</p>
+<p>Start this section by ensuring we have the HuBMAP and our own
+collections</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hubmap</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">hubmap_collections</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">display_name</span> <span class="op">==</span> <span class="st">"HuBMAP Public"</span><span class="op">)</span></span>
+<span><span class="va">my_collections</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/collections.html">my_collections</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>We illustrate directory and file transfer on a specific HuBMAP
+dataset. Here is the dataset and directory content</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hubmap_dataset</span> <span class="op">&lt;-</span> <span class="st">"d1dcab2df80590d8cd8770948abaf976"</span></span>
+<span><span class="fu"><a href="../reference/collections.html">globus_ls</a></span><span class="op">(</span><span class="va">hubmap</span>, <span class="va">hubmap_dataset</span><span class="op">)</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
+<span><span class="co">##   name                                          last_modified         size type </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> extras                                        2023-01-12 15:32:24…  <span style="text-decoration: underline;">4</span>096 dir  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> imzML                                         2023-01-04 17:56:12…  <span style="text-decoration: underline;">4</span>096 dir  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> ometiffs                                      2023-01-04 17:58:26…  <span style="text-decoration: underline;">4</span>096 dir  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> d1dcab2df80590d8cd8770948abaf976-metadata.tsv 2023-01-12 15:32:21…  <span style="text-decoration: underline;">1</span>901 file </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> metadata.json                                 2024-04-17 23:24:32… <span style="text-decoration: underline;">34</span>814 file</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="file-transfer">File transfer<a class="anchor" aria-label="anchor" href="#file-transfer"></a>
+</h3>
+<p>Use <code><a href="../reference/transfer.html">copy()</a></code> to transfer files or directories between
+collections. We start with the <code>metadata.json</code> file, and
+transfer it to the ‘test’ directory in our local collection. Define the
+source and destination paths in the two collections.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">source_path</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">hubmap_dataset</span>, <span class="st">"metadata.json"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span>
+<span><span class="va">destination_path</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"tmp/HuBMAP/test"</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">source_path</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></code></pre></div>
+<p>Globus anticipates that large data transfers may be involved, so the
+<code><a href="../reference/transfer.html">copy()</a></code> operation actually submits a task that runs
+asynchronously. Globus has confidence in the robustness of their file
+transfer, so adopt a ‘fire and forget’ philosophy – the task will
+eventually succeed or fail, perhaps overcoming intermittent network or
+other issues.</p>
+<p>The <code>...</code> optional arguments to <code><a href="../reference/transfer.html">copy()</a></code> are
+the same as the arguments for the lower-level <code><a href="../reference/transfer.html">transfer()</a></code>
+function. By default, transfer tasks send email on completion, but we
+will check on task progress and respond appropriately. Each task can be
+labeled, the default label is provided by
+<code><a href="../reference/transfer.html">transfer_label()</a></code>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">task</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transfer.html">copy</a></span><span class="op">(</span></span>
+<span>    <span class="va">hubmap</span>, <span class="va">my_collections</span>,        <span class="co"># collections</span></span>
+<span>    <span class="va">source_path</span>, <span class="va">destination_path</span>, <span class="co"># paths</span></span>
+<span>    notify_on_succeeded <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">task</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">## Rows: 1</span></span>
+<span><span class="co">## Columns: 3</span></span>
+<span><span class="co">## $ submission_id <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1cec4f6f-5a66-11ef-a026-9921d9de2129"</span></span>
+<span><span class="co">## $ task_id       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1cec4f6e-5a66-11ef-a026-9921d9de2129"</span></span>
+<span><span class="co">## $ code          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Accepted"</span></span></code></pre></div>
+<p>We anticipate that <code>code</code> is “Accepted”, indicating that
+the task is sufficiently well-formatted to be added to the task
+queue.</p>
+</div>
+<div class="section level3">
+<h3 id="task-management">Task management<a class="anchor" aria-label="anchor" href="#task-management"></a>
+</h3>
+<p>Use <code><a href="../reference/task.html">task_status()</a></code> to check on status.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/task.html">task_status</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
+<span><span class="co">##   task_id                              type     status nice_status label        </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1cec4f6e-5a66-11ef-a026-9921d9de2129 TRANSFER ACTIVE Queued      2024-08-14 1…</span></span></code></pre></div>
+<p>The <code>status</code> column changes from <code>ACTIVE</code> to
+<code>SUCCEEDED</code> for successful tasks. An active task proceeding
+normally has <code>nice_status</code> either <code>Queued</code> or
+<code>OK</code>. An active task may be encountering errors, e.g.,
+because the local connection is offline (<code>CONNECTION_FAILED</code>)
+or paused (<code>GC_PAUSED</code>) or that the source or destination
+file exists but the user does not have permission to read or write it
+(<code>PERMISSION_DENIED</code>). Perhaps unintuitively, Globus views
+these errors as transient (e.g., because the local collection may come
+back online) and so continues to try to complete the task. Active tasks
+that persist in an error state will eventually fail.</p>
+<p>Failed tasks have status <code>FAILED</code>.</p>
+<p>Let’s write a simple loop to check on status, allowing the task to
+run for up to 60 seconds.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">now</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw">repeat</span> <span class="op">{</span></span>
+<span>    <span class="va">status</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/task.html">task_status</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span><span class="op">$</span><span class="va">status</span></span>
+<span>    <span class="va">complete</span> <span class="op">&lt;-</span> <span class="va">status</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SUCCEEDED"</span>, <span class="st">"FAILED"</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">complete</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">now</span> <span class="op">&gt;</span> <span class="fl">60</span><span class="op">)</span></span>
+<span>        <span class="kw">break</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>If the task was successful, we should see the file in our local
+collection.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">status</span></span>
+<span><span class="co">## [1] "SUCCEEDED"</span></span>
+<span><span class="fu"><a href="../reference/collections.html">globus_ls</a></span><span class="op">(</span><span class="va">my_collections</span>, <span class="st">"tmp/HuBMAP/test"</span><span class="op">)</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">##   name          last_modified              size type </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> metadata.json 2024-08-14 17:53:33+00:00 <span style="text-decoration: underline;">34</span>814 file</span></span></code></pre></div>
+<p>If the task has failed or is still active for
+<code>nice_status</code> reasons that are not likely to resolve, the
+task can be canceled. Actually, canceling a completed task generates a
+useful message without error.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/task.html">task_cancel</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="co">## TaskComplete: The task completed before the cancel request was processed.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="directory-transfer">Directory transfer<a class="anchor" aria-label="anchor" href="#directory-transfer"></a>
+</h3>
+<p>Directory transfer is similar. Here we transfer the entire HuBMAP
+dataset to our local collection.</p>
+<p>Specify the source path as the HuBMAP dataset, and the destination
+path as the dataset id in our local collection.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">source_path</span> <span class="op">&lt;-</span> <span class="va">hubmap_dataset</span></span>
+<span><span class="va">destination_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"tmp/HuBMAP"</span>, <span class="va">hubmap_dataset</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span></code></pre></div>
+<p>Submit the task as before, but add <code>recursive = TRUE</code>
+since this is a directory. As the task may take quite a while to
+complete, we will not change the default
+<code>notify_on_succeeded</code> option. Check on its initial
+status.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">task</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transfer.html">copy</a></span><span class="op">(</span></span>
+<span>    <span class="va">hubmap</span>, <span class="va">my_collections</span>,        <span class="co"># collections</span></span>
+<span>    <span class="va">source_path</span>, <span class="va">destination_path</span>, <span class="co"># paths</span></span>
+<span>    recursive <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/task.html">task_status</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
+<span><span class="co">##   task_id                              type     status nice_status label        </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 20cf8380-5a66-11ef-a026-9921d9de2129 TRANSFER ACTIVE Queued      2024-08-14 1…</span></span></code></pre></div>
+<p>The task is added to a queue, and eventually the entire content of
+the HuBMAP dataset is transferred.</p>
+<p>One can gain additional insight into the progress of the task by
+asking for <code>all_fields</code> of the task status. Relevant fields
+are the number of bytes transferred and the effective transfer rate. We
+use a helper function to format these values in a more intelligibly.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bytes_to_units</span> <span class="op">&lt;-</span></span>
+<span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>    <span class="co">## use R's 'object_size' S3 class to pretty-print bytes as MB, etc</span></span>
+<span>    <span class="va">x</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">"object_size"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/task.html">task_status</a></span><span class="op">(</span><span class="va">task</span>, all_fields <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>        <span class="va">status</span>, <span class="va">nice_status</span>,</span>
+<span>        <span class="va">bytes_transferred</span>,</span>
+<span>        <span class="va">effective_bytes_per_second</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>        bytes_transferred <span class="op">=</span> <span class="fu">bytes_to_units</span><span class="op">(</span><span class="va">bytes_transferred</span><span class="op">)</span>,</span>
+<span>        effective_bytes_per_second <span class="op">=</span></span>
+<span>            <span class="fu">bytes_to_units</span><span class="op">(</span><span class="va">effective_bytes_per_second</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="co">##   status nice_status bytes_transferred effective_bytes_per_second</span></span>
+<span><span class="co">##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;             &lt;chr&gt;</span></span>
+<span><span class="co">## 1 ACTIVE OK          227.8 Mb          486.9 Kb</span></span></code></pre></div>
+<p>The transfer can take some time, so in the interest of brevity we
+cancel the task.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/task.html">task_cancel</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="co">## Canceled: The task has been cancelled successfully.</span></span></code></pre></div>
+<p>Neglecting to set <code>recursive = TRUE</code> results in a
+<code>nice_status</code> <code>IS_A_DIRECTORY</code>. Globus nonetheless
+continues to try the file transfer, but we would recognize this as ‘user
+error’ and would cancel and resubmit the task.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">task</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transfer.html">copy</a></span><span class="op">(</span></span>
+<span>    <span class="va">hubmap</span>, <span class="va">my_collections</span>, <span class="co"># collections</span></span>
+<span>    <span class="va">source_path</span>,</span>
+<span>    <span class="va">destination_path</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">## ...</span></span>
+<span><span class="fu"><a href="../reference/task.html">task_status</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="co">## # A tibble: 1 × 5</span></span>
+<span><span class="co">##   task_id                              type     status nice_status    label</span></span>
+<span><span class="co">##   &lt;chr&gt;                                &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt;</span></span>
+<span><span class="co">## 1 36bee1e6-5a5b-11ef-be9a-83cd94efb466 TRANSFER ACTIVE IS_A_DIRECTORY 2024-08-1…</span></span>
+<span></span>
+<span><span class="co">## Oops, forgot the `recursive = TRUE` option</span></span>
+<span><span class="fu"><a href="../reference/task.html">task_cancel</a></span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
+<span><span class="va">task</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transfer.html">copy</a></span><span class="op">(</span></span>
+<span>    <span class="va">hubmap</span>, <span class="va">my_collections</span>, <span class="co"># collections</span></span>
+<span>    <span class="va">source_path</span>,</span>
+<span>    <span class="va">destination_path</span>,</span>
+<span>    recursive <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="complicated-transfer-tasks">Complicated transfer tasks<a class="anchor" aria-label="anchor" href="#complicated-transfer-tasks"></a>
+</h3>
+<p>Globus supports more complicated tasks, for instance submitting
+multiple transfer tasks at once, or synchronizing two locations. These
+will be developed in subsequent iterations of the package.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <p>This vignette was compiled using the following software versions</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## R version 4.4.1 Patched (2024-06-20 r86819)</span></span>
 <span><span class="co">## Platform: aarch64-apple-darwin23.5.0</span></span>
@@ -265,7 +489,7 @@ specified.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] rglobus_0.0.0.9002</span></span>
+<span><span class="co">## [1] rglobus_0.0.0.9003</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] jsonlite_1.8.8    dplyr_1.1.4       compiler_4.4.1    promises_1.3.0   </span></span>
