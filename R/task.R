@@ -48,8 +48,8 @@
 #'     print(task_status)
 #'
 #'     ## tasks that are failing need to be cancelled
-#'     status <- pull(task_status, "status")
-#'     nice_status <- pull(task_status, "nice_status")
+#'     status <- dplyr::pull(task_status, "status")
+#'     nice_status <- dplyr::pull(task_status, "nice_status")
 #'     cancel <-
 #'         ## task has failed, or...
 #'         identical(status, "FAILED") ||
