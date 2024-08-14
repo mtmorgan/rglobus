@@ -36,10 +36,19 @@ Attach the package to your *R* session
 library(rglobus)
 ```
 
-See the [Local collections][] section to configure your own computer
-for transfer operations.
+Globus provides software to allow your laptop to appear as a
+collection. Follow the [Globus Connect Personal][] installation
+instructions for your operating system, and launch the
+application. Then identify a location on your local disk to act as a
+collection.
 
-[Local collections]: #local-collections
+On macOS, I created a directory `~/tmp/HuBMAP`, and then configured
+Globus Connect Personal to share that location. I did this by
+launching the application (it appears as an icon in the menu bar) then
+selecting 'Preferences' and using the '-' and '+' buttons to select
+the path to my local collection.
+
+[![Local collections](images/local_collection.png)](#local-collections){style="display:block; margin-left:auto; margin-right:auto; width:80%"}
 
 # Discovering and navigating collections
 
@@ -118,20 +127,6 @@ to support 'piping'.
 [HuBMAPR]: https://christinehou11.github.io/HuBMAPR/
 
 ## Local collections
-
-Globus provides software to allow your laptop to appear as a
-collection. Follow the [Globus Connect Personal][] installation
-instructions for your operating system, and launch the
-application. Then identify a location on your local disk to act as a
-collection.
-
-On macOS, I created a directory `~/tmp/HuBMAP`, and then configured
-Globus Connect Personal to share that location. I did this by
-launching the application (it appears as an icon in the menu bar) then
-selecting 'Preferences' and using the '-' and '+' buttons to select
-the path to my local collection.
-
-[![Local collections](images/local_collection.png)](#local-collections){style="display:block; margin-left:auto; margin-right:auto; width:80%"}
 
 Collections owned by you appear in `collections()`, but the
 convenience function `my_collections()` provides another way to access
